@@ -36,8 +36,12 @@ uses
 {$ifdef FPC}{$ifdef unix}cthreads,{$endif}{$endif}
 //  mseopenglgdiinit,
   mseskindesign,menusdesign,
+  
+  {$ifdef mse_i18n}`
   gettext,msei18nutils,mseconsts,mseconsts_ru,mseconsts_uzcyr,
   mseconsts_de,mseconsts_es,mseconsts_zh,mseconsts_id,mseconsts_fr,
+  {$endif}
+  
   msegui,msegraphics,actionsmodule,sourceform,debuggerform,
   componentpaletteform,componentstore,
   messageform,watchform,objectinspector,breakpointsform,watchpointsform,
@@ -45,10 +49,14 @@ uses
   threadsform,mseguiglob,symbolform,
   targetconsole,main,mseguiintf,{msestockobjects,}regunitgroups,guitemplates,
   msegraphutils,msefont,stringconsts;
+  
+ {$ifdef mse_i18n}`  
 var
   MSELang,MSEFallbacklang:string;
+  {$endif}
 
 begin
+ {$ifdef mse_i18n}`
  Gettext.GetLanguageIDs(MSELang,MSEFallbackLang);
  //Ukrainian, Belarusian, Bashkir
  if (MSEFallbackLang='uk') or (MSEFallbackLang='be') or (MSEFallbackLang='ba')
@@ -61,6 +69,9 @@ begin
                                                    then MSEFallbackLang:='ru';
  If loadlangunit('i18n_'+MSEFallbackLang,true) then
                                                    setlangconsts(MSEFallbackLang);
+  
+ {$endif}
+                                                   
  registerfontalias('mseide_source',gui_getdefaultfontnames[stf_courier],
                     fam_fixnooverwrite,16);
  application.createdatamodule(tguitemplatesmo,guitemplatesmo);
