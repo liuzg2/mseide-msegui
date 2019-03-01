@@ -11,8 +11,6 @@ unit msesqlite3conn;
 
 {$ifdef FPC}{$mode objfpc}{$h+}{$endif}
 
-{$if (not defined(CPUARM)) and (not defined(CPUAARCH64))}{$define set8087cw}{$endif}
-
 interface
 uses
  classes,mclasses,msedb,msqldb,msestrings,mdb,sqlite3dyn,msetypes,msedatabase;
@@ -601,12 +599,12 @@ begin
     end;
    end;
   end;
- {$ifdef set8087cw}
+ {$ifndef CPUARM}
   wo1:= get8087cw;
   set8087cw(wo1 or $1f);             //mask exceptions, Sqlite3 has overflow
  {$endif}
   fstate:= sqlite3_step(fstatement);
- {$ifdef set8087cw}
+ {$ifndef CPUARM}
   set8087cw(wo1);                    //restore
  {$endif}
   if fstate = sqlite_row then begin

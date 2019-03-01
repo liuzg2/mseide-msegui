@@ -4,7 +4,7 @@ interface
 uses
  msesystypes,{$ifdef FPC}dynlibs,{$endif}{msestrings,}sysutils,msetypes{,msesys};
 
-{$ifndef cpuarm}{$define set8087cw}{$endif}
+{$if (not defined(CPUARM)) and (not defined(CPUAARCH64))}{$define set8087cw}{$endif}
 
 type
  funcinfoty = record

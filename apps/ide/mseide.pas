@@ -36,6 +36,8 @@ uses
 {$ifdef FPC}{$ifdef unix}cthreads,{$endif}{$endif}
 //  mseopenglgdiinit,
   mseskindesign,menusdesign,
+  gettext,msei18nutils,mseconsts,mseconsts_ru,mseconsts_uzcyr,
+  mseconsts_de,mseconsts_es,mseconsts_zh,mseconsts_id,mseconsts_fr,
   msegui,msegraphics,actionsmodule,sourceform,debuggerform,
   componentpaletteform,componentstore,
   messageform,watchform,objectinspector,breakpointsform,watchpointsform,
@@ -43,7 +45,22 @@ uses
   threadsform,mseguiglob,symbolform,
   targetconsole,main,mseguiintf,{msestockobjects,}regunitgroups,guitemplates,
   msegraphutils,msefont,stringconsts;
+var
+  MSELang,MSEFallbacklang:string;
+
 begin
+ Gettext.GetLanguageIDs(MSELang,MSEFallbackLang);
+ //Ukrainian, Belarusian, Bashkir
+ if (MSEFallbackLang='uk') or (MSEFallbackLang='be') or (MSEFallbackLang='ba')
+ //Bulgarian, Chechen, Church Slavic
+ or (MSEFallbackLang='bg') or (MSEFallbackLang='ce') or (MSEFallbackLang='cu')
+ //Chuvash, Kazakh, Komi
+ or (MSEFallbackLang='cv') or (MSEFallbackLang='kk') or (MSEFallbackLang='kv')
+ //Moldavian, Tatar
+ or (MSEFallbackLang='mo') or (MSEFallbackLang='tt')
+                                                   then MSEFallbackLang:='ru';
+ If loadlangunit('i18n_'+MSEFallbackLang,true) then
+                                                   setlangconsts(MSEFallbackLang);
  registerfontalias('mseide_source',gui_getdefaultfontnames[stf_courier],
                     fam_fixnooverwrite,16);
  application.createdatamodule(tguitemplatesmo,guitemplatesmo);
