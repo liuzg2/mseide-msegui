@@ -2413,6 +2413,8 @@ var
  imc: himc;
  imminfo: compositionform;
  ev1: tmseevent;
+ ki :smallint;
+ kbuffer:msestring;
 label
  nodefwindowproclab; 
 begin
@@ -2648,10 +2650,31 @@ begin
    if key1 = key_escape then begin
     escapepressed:= true;
    end;
-   eventlist.add(tkeyevent.create(ahwnd,false,key1,key1,shiftstate,
+    kbuffer:='';
+
+  if  eventlist.count>0
+      then begin
+      if  ((key1=key_unknown)
+
+        and  (charbuffer<>'') and (tkeyevent( eventlist[eventlist.count-1]).fkey=key_none) )
+        then
+       begin
+
+         for ki:= 0   to  eventlist.count-1
+       do
+       begin
+         kbuffer:=kbuffer+tkeyevent( eventlist[ki]).fchars;
+       end;
+        end;
+        end;
+          if charbuffer<>kbuffer
+           then
+           begin   eventlist.add(tkeyevent.create(ahwnd,false,key1,key1,shiftstate,
                                     charbuffer,timestamp));
-   charbuffer:= '';
-   if (shiftstate = []) and (key1 = key_f10) then begin
+
+              end;
+          charbuffer:= '';
+    if (shiftstate = []) and (key1 = key_f10) then begin
     goto nodefwindowproclab; //no windows menu activation
    end;
   end;
